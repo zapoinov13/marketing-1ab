@@ -88,14 +88,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "AI Marketing Lab — MarkVision AI" },
       {
         property: "og:description",
-        content: "Строй собственную AI-команду. Обучение, автоматизация, комьюнити.",
+        content: "AI Marketing Lab by MarkVision — операционная система для построения собственной AI-команды. Уроки, AI-ассистент, комьюнити.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "AI Marketing Lab — MarkVision AI" },
+      { name: "twitter:description", content: "AI Marketing Lab by MarkVision — операционная система для построения собственной AI-команды. Уроки, AI-ассистент, комьюнити." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/KwyujX8PvBRkTPCKNDrYkG6yb7W2/social-images/social-1784201745663-ChatGPT_Image_20_янв._2026_г.,_23_43_55.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/KwyujX8PvBRkTPCKNDrYkG6yb7W2/social-images/social-1784201745663-ChatGPT_Image_20_янв._2026_г.,_23_43_55.webp" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
