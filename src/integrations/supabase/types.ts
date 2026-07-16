@@ -15,6 +15,9 @@ export type Database = {
           progress: number;
           avatar_url: string | null;
           is_admin: boolean;
+          is_blocked: boolean;
+          is_removed: boolean;
+          email: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -29,6 +32,9 @@ export type Database = {
           progress?: number;
           avatar_url?: string | null;
           is_admin?: boolean;
+          is_blocked?: boolean;
+          is_removed?: boolean;
+          email?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -43,6 +49,9 @@ export type Database = {
           progress?: number;
           avatar_url?: string | null;
           is_admin?: boolean;
+          is_blocked?: boolean;
+          is_removed?: boolean;
+          email?: string | null;
           updated_at?: string;
         };
         Relationships: [];

@@ -54,6 +54,9 @@ function loadDemoProfile(): Profile | null {
       progress: data.progress ?? 0,
       avatar_url: avatar || data.avatar_url || null,
       is_admin: Boolean(data.is_admin),
+      is_blocked: Boolean(data.is_blocked),
+      is_removed: Boolean(data.is_removed),
+      email: (data.email as string | null) ?? null,
       created_at: data.created_at || new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
@@ -79,6 +82,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .maybeSingle();
     if (error) {
       console.warn("[auth] profile load:", error.message);
+      setProfile(null);
+      return;
+    }
+    if (data && (data.is_blocked || data.is_removed)) {
+      await supabase.auth.signOut();
+      setSession(null);
       setProfile(null);
       return;
     }
@@ -142,6 +151,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               progress: 0,
               avatar_url: localStorage.getItem(DEMO_AVATAR_KEY),
               is_admin: false,
+              is_blocked: false,
+              is_removed: false,
+              email: null,
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
               ...(p ?? {}),
@@ -237,8 +249,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       refreshProfile,
       async signIn(email, password) {
         if (!supabase) return { error: "Supabase не настроен" };
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        return error ? { error: error.message } : {};
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) return { error: error.message };
+        if (data.user) {
+          const { data: prof } = await supabase
+            .from("profiles")
+            .select("is_blocked,is_removed")
+            .eq("id", data.user.id)
+            .maybeSingle();
+          if (prof?.is_blocked) {
+            await supabase.auth.signOut();
+            return { error: "Доступ закрыт администратором. Напиши куратору." };
+          }
+          if (prof?.is_removed) {
+            await supabase.auth.signOut();
+            return { error: "Аккаунт удалён из курса. Напиши куратору." };
+          }
+        }
+        return {};
       },
       async signUp({ email, password, fullName, company }) {
         if (!supabase) return { error: "Supabase не настроен" };

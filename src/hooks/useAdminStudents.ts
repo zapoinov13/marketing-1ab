@@ -15,11 +15,15 @@ export type AdminStudent = {
   company: string | null;
   phone: string | null;
   telegram: string | null;
+  email: string | null;
   level: string;
   xp: number;
   progress: number;
   avatar_url: string | null;
   updated_at: string;
+  is_admin: boolean;
+  is_blocked: boolean;
+  is_removed: boolean;
   stages: StudentStage[];
   currentStageId: string;
   currentStageTitle: string;
@@ -28,6 +32,12 @@ export type AdminStudent = {
 
 const DEMO_STUDENTS: AdminStudent[] = [];
 
+const ZERO_STAGES = missionStages.map((s, i) => ({
+  stage_id: s.id,
+  status: (i === 0 ? "active" : "locked") as StageStatus,
+  progress: 0,
+}));
+
 function enrich(
   profile: {
     id: string;
@@ -35,11 +45,15 @@ function enrich(
     company: string | null;
     phone: string | null;
     telegram: string | null;
+    email: string | null;
     level: string;
     xp: number;
     progress: number;
     avatar_url: string | null;
     updated_at: string;
+    is_admin: boolean;
+    is_blocked: boolean;
+    is_removed: boolean;
   },
   stagesRaw: { stage_id: string; status: string; progress: number }[],
 ): AdminStudent {
@@ -75,6 +89,7 @@ export function useAdminStudents() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [usingDemo, setUsingDemo] = useState(false);
+  const [actionMsg, setActionMsg] = useState("");
 
   const load = useCallback(async () => {
     if (!ready) return;
@@ -93,7 +108,7 @@ export function useAdminStudents() {
     const { data: profiles, error: pErr } = await supabase
       .from("profiles")
       .select(
-        "id,full_name,company,phone,telegram,level,xp,progress,avatar_url,updated_at,is_admin",
+        "id,full_name,company,phone,telegram,email,level,xp,progress,avatar_url,updated_at,is_admin,is_blocked,is_removed",
       )
       .order("progress", { ascending: false });
 
@@ -136,11 +151,15 @@ export function useAdminStudents() {
             company: p.company,
             phone: p.phone,
             telegram: p.telegram,
+            email: p.email ?? null,
             level: p.level,
             xp: p.xp,
             progress: p.progress,
             avatar_url: p.avatar_url,
             updated_at: p.updated_at,
+            is_admin: Boolean(p.is_admin),
+            is_blocked: Boolean(p.is_blocked),
+            is_removed: Boolean(p.is_removed),
           },
           byUser.get(p.id) ?? [],
         ),
@@ -155,17 +174,120 @@ export function useAdminStudents() {
     void load();
   }, [load]);
 
+  const setAccess = useCallback(
+    async (
+      studentId: string,
+      patch: { is_blocked?: boolean; is_removed?: boolean },
+    ) => {
+      if (!supabase || !user) return { error: "Нет доступа" };
+      if (studentId === user.id) return { error: "Нельзя менять доступ себе" };
+
+      setActionMsg("");
+      const { error: uErr } = await supabase
+        .from("profiles")
+        .update({
+          ...patch,
+          updated_at: new Date().toISOString(),
+        } as never)
+        .eq("id", studentId);
+
+      if (uErr) return { error: uErr.message };
+      await load();
+      return {};
+    },
+    [user, load],
+  );
+
+  const blockStudent = useCallback(
+    (id: string) => setAccess(id, { is_blocked: true }),
+    [setAccess],
+  );
+
+  const unblockStudent = useCallback(
+    (id: string) => setAccess(id, { is_blocked: false }),
+    [setAccess],
+  );
+
+  const removeStudent = useCallback(
+    async (id: string) => {
+      const res = await setAccess(id, { is_removed: true, is_blocked: true });
+      if (!res.error) setActionMsg("Ученик удалён из курса (доступ закрыт)");
+      return res;
+    },
+    [setAccess],
+  );
+
+  const restoreStudent = useCallback(
+    async (id: string) => {
+      const res = await setAccess(id, { is_removed: false, is_blocked: false });
+      if (!res.error) setActionMsg("Доступ восстановлен");
+      return res;
+    },
+    [setAccess],
+  );
+
+  const resetProgress = useCallback(
+    async (studentId: string) => {
+      if (!supabase || !user) return { error: "Нет доступа" };
+      setActionMsg("");
+
+      const { error: pErr } = await supabase
+        .from("profiles")
+        .update({
+          progress: 0,
+          xp: 0,
+          level: "Builder",
+          updated_at: new Date().toISOString(),
+        } as never)
+        .eq("id", studentId);
+      if (pErr) return { error: pErr.message };
+
+      const seed = ZERO_STAGES.map((r) => ({
+        user_id: studentId,
+        stage_id: r.stage_id,
+        status: r.status,
+        progress: 0,
+        updated_at: new Date().toISOString(),
+      }));
+      const { error: sErr } = await supabase
+        .from("stage_progress")
+        .upsert(seed as never, { onConflict: "user_id,stage_id" });
+      if (sErr) return { error: sErr.message };
+
+      await supabase.from("checklist_items").delete().eq("user_id", studentId);
+      await supabase
+        .from("homework_submissions")
+        .delete()
+        .eq("user_id", studentId);
+
+      await load();
+      setActionMsg("Прогресс обнулён");
+      return {};
+    },
+    [user, load],
+  );
+
   const stats = useMemo(() => {
-    const total = students.length;
+    const active = students.filter((s) => !s.is_removed && !s.is_blocked);
+    const blocked = students.filter((s) => s.is_blocked && !s.is_removed);
+    const removed = students.filter((s) => s.is_removed);
     const avg =
-      total === 0
+      active.length === 0
         ? 0
-        : Math.round(students.reduce((s, x) => s + x.progress, 0) / total);
-    const onStage1 = students.filter((s) => s.currentStageId === "1").length;
-    const finished = students.filter(
+        : Math.round(active.reduce((s, x) => s + x.progress, 0) / active.length);
+    const onStage1 = active.filter((s) => s.currentStageId === "1").length;
+    const finished = active.filter(
       (s) => s.stagesDone >= 8 || s.progress >= 100,
     ).length;
-    return { total, avg, onStage1, finished };
+    return {
+      total: students.length,
+      active: active.length,
+      blocked: blocked.length,
+      removed: removed.length,
+      avg,
+      onStage1,
+      finished,
+    };
   }, [students]);
 
   return {
@@ -176,6 +298,13 @@ export function useAdminStudents() {
     loading,
     error,
     usingDemo,
+    actionMsg,
     reload: load,
+    blockStudent,
+    unblockStudent,
+    removeStudent,
+    restoreStudent,
+    resetProgress,
+    currentUserId: user?.id ?? null,
   };
 }
