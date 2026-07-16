@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
-import { ArrowUp, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { Send, Sparkles } from "lucide-react";
+import { assistantQuickActions, user } from "@/data/platform";
 
 export const Route = createFileRoute("/assistant")({
   component: Assistant,
@@ -9,93 +10,121 @@ export const Route = createFileRoute("/assistant")({
 type Msg = { id: string; role: "user" | "assistant"; text: string };
 
 const seed: Msg[] = [
-  { id: "1", role: "assistant", text: "Привет! Я твой AI-ментор. Что изучаем сегодня?" },
-  { id: "2", role: "user", text: "Помоги собрать воронку для B2B SaaS." },
   {
-    id: "3",
+    id: "1",
     role: "assistant",
-    text:
-      "Отлично. Начнём с ICP: опиши идеального клиента — индустрия, размер компании, боль. Я предложу 3 варианта воронки под каждый сегмент.",
+    text: `Привет, ${user.name}.\n\nЧем помочь?`,
   },
 ];
 
 function Assistant() {
   const [messages, setMessages] = useState<Msg[]>(seed);
-  const [text, setText] = useState("");
+  const [input, setInput] = useState("");
 
-  const submit = (e: FormEvent) => {
-    e.preventDefault();
+  function send(text: string) {
     const value = text.trim();
     if (!value) return;
-    setMessages((m) => [
-      ...m,
-      { id: crypto.randomUUID(), role: "user", text: value },
-      {
-        id: crypto.randomUUID(),
-        role: "assistant",
-        text: "Отличный вопрос — сейчас разберём по шагам. (демо-ответ)",
-      },
-    ]);
-    setText("");
-  };
+
+    const userMsg: Msg = { id: crypto.randomUUID(), role: "user", text: value };
+    const reply: Msg = {
+      id: crypto.randomUUID(),
+      role: "assistant",
+      text: demoReply(value),
+    };
+    setMessages((prev) => [...prev, userMsg, reply]);
+    setInput("");
+  }
 
   return (
-    <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-4xl flex-col px-4 sm:px-6 lg:px-10">
-      <div className="border-b border-border py-6">
-        <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
+    <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-3xl flex-col px-4 py-6 sm:px-6 lg:px-10">
+      <div className="mb-4">
+        <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
           <Sparkles className="h-3.5 w-3.5 text-primary" /> AI Assistant
         </div>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight">Персональный ментор</h1>
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+          Твой AI-помощник по курсу
+        </h1>
       </div>
 
-      {/* Messages */}
-      <div className="flex-1 space-y-6 overflow-y-auto py-8">
-        {messages.map((m) =>
-          m.role === "assistant" ? (
-            <div key={m.id} className="flex gap-3">
-              <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <Sparkles className="h-4 w-4" />
-              </div>
-              <div className="max-w-[80%] text-sm leading-relaxed text-foreground">{m.text}</div>
-            </div>
-          ) : (
-            <div key={m.id} className="flex justify-end">
-              <div className="max-w-[80%] rounded-2xl bg-primary px-4 py-2.5 text-sm text-primary-foreground">
-                {m.text}
-              </div>
-            </div>
-          ),
-        )}
-      </div>
-
-      {/* Composer */}
-      <form onSubmit={submit} className="sticky bottom-0 pb-6 pt-2">
-        <div className="glass flex items-end gap-2 rounded-2xl p-2">
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            rows={1}
-            placeholder="Спроси что-нибудь у AI-ментора..."
-            className="flex-1 resize-none bg-transparent px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground outline-none"
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                submit(e as unknown as FormEvent);
-              }
-            }}
-          />
-          <button
-            type="submit"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-transform hover:scale-105 disabled:opacity-40"
-            disabled={!text.trim()}
+      <div className="flex-1 space-y-4 overflow-y-auto rounded-3xl border border-border bg-card p-4 sm:p-6">
+        {messages.map((m) => (
+          <div
+            key={m.id}
+            className={[
+              "flex",
+              m.role === "user" ? "justify-end" : "justify-start",
+            ].join(" ")}
           >
-            <ArrowUp className="h-4 w-4" />
+            <div
+              className={[
+                "max-w-[85%] whitespace-pre-wrap rounded-2xl px-4 py-3 text-sm leading-relaxed",
+                m.role === "user"
+                  ? "bg-primary text-primary-foreground"
+                  : "border border-border bg-background/60 text-foreground",
+              ].join(" ")}
+            >
+              {m.text}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        {assistantQuickActions.map((action) => (
+          <button
+            key={action}
+            onClick={() => send(action)}
+            className="rounded-full border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+          >
+            {action}
           </button>
-        </div>
-        <div className="mt-2 text-center text-[11px] text-muted-foreground">
-          Демо-интерфейс. Ответы AI подключаются на следующем этапе.
-        </div>
+        ))}
+      </div>
+
+      <form
+        className="mt-4 flex gap-2"
+        onSubmit={(e) => {
+          e.preventDefault();
+          send(input);
+        }}
+      >
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Спроси что угодно по курсу..."
+          className="h-12 flex-1 rounded-2xl border border-border bg-card px-4 text-sm outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
+        />
+        <button
+          type="submit"
+          className="inline-flex h-12 items-center gap-2 rounded-2xl bg-primary px-5 text-sm font-medium text-primary-foreground"
+        >
+          <Send className="h-4 w-4" />
+          Отправить
+        </button>
       </form>
+      <p className="mt-2 text-center text-[11px] text-muted-foreground">
+        Демо-режим. Позже подключим настоящий AI API.
+      </p>
     </div>
   );
+}
+
+function demoReply(question: string) {
+  const q = question.toLowerCase();
+  if (q.includes("meta")) {
+    return "Чтобы подключить Meta:\n1) Business Manager\n2) Рекламный кабинет\n3) System User + токен\n\nПодробности — в разделе Документация → Meta.";
+  }
+  if (q.includes("n8n")) {
+    return "Частые ошибки n8n: неверный webhook URL, истёкший credential, неправильный JSON в Code node.\n\nПроверь credentials и последний execution в n8n.";
+  }
+  if (q.includes("сайт")) {
+    return "Пришли ссылку на сайт — в полной версии я проверю оффер, CTA и скорость. Пока открой урок «Первый сайт» и чеклист деплоя.";
+  }
+  if (q.includes("оффер")) {
+    return "Черновик оффера:\n«За 7 дней соберём AI-команду, которая ведёт рекламу, контент и отчёты без найма отдела.»\n\nХочешь версию под стоматологию?";
+  }
+  if (q.includes("промпт")) {
+    return "Промпт:\n«Ты AI-таргетолог. Дано: ниша, бюджет, гео. Составь оффер, 3 креатива и структуру кампании Meta.»";
+  }
+  return `Принял: «${question}».\n\nВ демо я отвечаю по шаблонам. Скоро здесь будет полноценный ассистент курса.`;
 }

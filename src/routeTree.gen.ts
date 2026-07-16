@@ -9,17 +9,29 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MissionControlRouteImport } from './routes/mission-control'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as LessonsRouteImport } from './routes/lessons'
+import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as HomeworkRouteImport } from './routes/homework'
 import { Route as DocsRouteImport } from './routes/docs'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AssistantRouteImport } from './routes/assistant'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LessonsIndexRouteImport } from './routes/lessons.index'
+import { Route as HomeworkIndexRouteImport } from './routes/homework.index'
 import { Route as LessonsStageIdRouteImport } from './routes/lessons.$stageId'
+import { Route as HomeworkTaskIdRouteImport } from './routes/homework.$taskId'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -35,9 +47,19 @@ const MissionControlRoute = MissionControlRouteImport.update({
   path: '/mission-control',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LessonsRoute = LessonsRouteImport.update({
   id: '/lessons',
   path: '/lessons',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeaderboardRoute = LeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HomeworkRoute = HomeworkRouteImport.update({
@@ -60,107 +82,176 @@ const AssistantRoute = AssistantRouteImport.update({
   path: '/assistant',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const LessonsIndexRoute = LessonsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LessonsRoute,
+} as any)
+const HomeworkIndexRoute = HomeworkIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => HomeworkRoute,
 } as any)
 const LessonsStageIdRoute = LessonsStageIdRouteImport.update({
   id: '/$stageId',
   path: '/$stageId',
   getParentRoute: () => LessonsRoute,
 } as any)
+const HomeworkTaskIdRoute = HomeworkTaskIdRouteImport.update({
+  id: '/$taskId',
+  path: '/$taskId',
+  getParentRoute: () => HomeworkRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/assistant': typeof AssistantRoute
   '/community': typeof CommunityRoute
   '/docs': typeof DocsRoute
-  '/homework': typeof HomeworkRoute
+  '/homework': typeof HomeworkRouteWithChildren
+  '/leaderboard': typeof LeaderboardRoute
   '/lessons': typeof LessonsRouteWithChildren
+  '/login': typeof LoginRoute
   '/mission-control': typeof MissionControlRoute
   '/profile': typeof ProfileRoute
   '/settings': typeof SettingsRoute
+  '/signup': typeof SignupRoute
+  '/homework/$taskId': typeof HomeworkTaskIdRoute
   '/lessons/$stageId': typeof LessonsStageIdRoute
+  '/homework/': typeof HomeworkIndexRoute
+  '/lessons/': typeof LessonsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/assistant': typeof AssistantRoute
   '/community': typeof CommunityRoute
   '/docs': typeof DocsRoute
-  '/homework': typeof HomeworkRoute
-  '/lessons': typeof LessonsRouteWithChildren
+  '/leaderboard': typeof LeaderboardRoute
+  '/login': typeof LoginRoute
   '/mission-control': typeof MissionControlRoute
   '/profile': typeof ProfileRoute
   '/settings': typeof SettingsRoute
+  '/signup': typeof SignupRoute
+  '/homework/$taskId': typeof HomeworkTaskIdRoute
   '/lessons/$stageId': typeof LessonsStageIdRoute
+  '/homework': typeof HomeworkIndexRoute
+  '/lessons': typeof LessonsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/assistant': typeof AssistantRoute
   '/community': typeof CommunityRoute
   '/docs': typeof DocsRoute
-  '/homework': typeof HomeworkRoute
+  '/homework': typeof HomeworkRouteWithChildren
+  '/leaderboard': typeof LeaderboardRoute
   '/lessons': typeof LessonsRouteWithChildren
+  '/login': typeof LoginRoute
   '/mission-control': typeof MissionControlRoute
   '/profile': typeof ProfileRoute
   '/settings': typeof SettingsRoute
+  '/signup': typeof SignupRoute
+  '/homework/$taskId': typeof HomeworkTaskIdRoute
   '/lessons/$stageId': typeof LessonsStageIdRoute
+  '/homework/': typeof HomeworkIndexRoute
+  '/lessons/': typeof LessonsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/assistant'
     | '/community'
     | '/docs'
     | '/homework'
+    | '/leaderboard'
     | '/lessons'
+    | '/login'
     | '/mission-control'
     | '/profile'
     | '/settings'
+    | '/signup'
+    | '/homework/$taskId'
     | '/lessons/$stageId'
+    | '/homework/'
+    | '/lessons/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/assistant'
     | '/community'
     | '/docs'
-    | '/homework'
-    | '/lessons'
+    | '/leaderboard'
+    | '/login'
     | '/mission-control'
     | '/profile'
     | '/settings'
+    | '/signup'
+    | '/homework/$taskId'
     | '/lessons/$stageId'
+    | '/homework'
+    | '/lessons'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/assistant'
     | '/community'
     | '/docs'
     | '/homework'
+    | '/leaderboard'
     | '/lessons'
+    | '/login'
     | '/mission-control'
     | '/profile'
     | '/settings'
+    | '/signup'
+    | '/homework/$taskId'
     | '/lessons/$stageId'
+    | '/homework/'
+    | '/lessons/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   AssistantRoute: typeof AssistantRoute
   CommunityRoute: typeof CommunityRoute
   DocsRoute: typeof DocsRoute
-  HomeworkRoute: typeof HomeworkRoute
+  HomeworkRoute: typeof HomeworkRouteWithChildren
+  LeaderboardRoute: typeof LeaderboardRoute
   LessonsRoute: typeof LessonsRouteWithChildren
+  LoginRoute: typeof LoginRoute
   MissionControlRoute: typeof MissionControlRoute
   ProfileRoute: typeof ProfileRoute
   SettingsRoute: typeof SettingsRoute
+  SignupRoute: typeof SignupRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
@@ -182,11 +273,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MissionControlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lessons': {
       id: '/lessons'
       path: '/lessons'
       fullPath: '/lessons'
       preLoaderRoute: typeof LessonsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leaderboard': {
+      id: '/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof LeaderboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/homework': {
@@ -217,12 +322,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssistantRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/lessons/': {
+      id: '/lessons/'
+      path: '/'
+      fullPath: '/lessons/'
+      preLoaderRoute: typeof LessonsIndexRouteImport
+      parentRoute: typeof LessonsRoute
+    }
+    '/homework/': {
+      id: '/homework/'
+      path: '/'
+      fullPath: '/homework/'
+      preLoaderRoute: typeof HomeworkIndexRouteImport
+      parentRoute: typeof HomeworkRoute
     }
     '/lessons/$stageId': {
       id: '/lessons/$stageId'
@@ -231,15 +357,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LessonsStageIdRouteImport
       parentRoute: typeof LessonsRoute
     }
+    '/homework/$taskId': {
+      id: '/homework/$taskId'
+      path: '/$taskId'
+      fullPath: '/homework/$taskId'
+      preLoaderRoute: typeof HomeworkTaskIdRouteImport
+      parentRoute: typeof HomeworkRoute
+    }
   }
 }
 
+interface HomeworkRouteChildren {
+  HomeworkTaskIdRoute: typeof HomeworkTaskIdRoute
+  HomeworkIndexRoute: typeof HomeworkIndexRoute
+}
+
+const HomeworkRouteChildren: HomeworkRouteChildren = {
+  HomeworkTaskIdRoute: HomeworkTaskIdRoute,
+  HomeworkIndexRoute: HomeworkIndexRoute,
+}
+
+const HomeworkRouteWithChildren = HomeworkRoute._addFileChildren(
+  HomeworkRouteChildren,
+)
+
 interface LessonsRouteChildren {
   LessonsStageIdRoute: typeof LessonsStageIdRoute
+  LessonsIndexRoute: typeof LessonsIndexRoute
 }
 
 const LessonsRouteChildren: LessonsRouteChildren = {
   LessonsStageIdRoute: LessonsStageIdRoute,
+  LessonsIndexRoute: LessonsIndexRoute,
 }
 
 const LessonsRouteWithChildren =
@@ -247,15 +396,29 @@ const LessonsRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   AssistantRoute: AssistantRoute,
   CommunityRoute: CommunityRoute,
   DocsRoute: DocsRoute,
-  HomeworkRoute: HomeworkRoute,
+  HomeworkRoute: HomeworkRouteWithChildren,
+  LeaderboardRoute: LeaderboardRoute,
   LessonsRoute: LessonsRouteWithChildren,
+  LoginRoute: LoginRoute,
   MissionControlRoute: MissionControlRoute,
   ProfileRoute: ProfileRoute,
   SettingsRoute: SettingsRoute,
+  SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

@@ -7,10 +7,13 @@ import {
   ClipboardList,
   Sparkles,
   Users,
+  Trophy,
   User,
   Settings,
+  Shield,
 } from "lucide-react";
-import logoAsset from "@/assets/markvision-logo.png.asset.json";
+import logoIcon from "@/assets/markvision-icon.png";
+import { useAuth } from "@/contexts/AuthContext";
 
 type NavItem = {
   to: string;
@@ -27,37 +30,45 @@ const nav: NavItem[] = [
   { to: "/homework", label: "Домашние задания", icon: ClipboardList },
   { to: "/assistant", label: "AI Assistant", icon: Sparkles },
   { to: "/community", label: "Сообщество", icon: Users },
+  { to: "/leaderboard", label: "Leaderboard", icon: Trophy },
+  { to: "/admin", label: "Админ-панель", icon: Shield },
   { to: "/profile", label: "Профиль", icon: User },
   { to: "/settings", label: "Настройки", icon: Settings },
 ];
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { profile } = useAuth();
+  const isAdmin = Boolean(profile?.is_admin);
 
   return (
     <div className="flex h-full flex-col">
-      {/* Brand */}
       <div className="flex items-center gap-3 px-5 py-5">
-        <div className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white/5 ring-1 ring-white/10">
-          <img src={logoAsset.url} alt="MarkVision AI" className="h-8 w-8 object-contain" />
-        </div>
+        <img
+          src={logoIcon}
+          alt="MarkVision AI"
+          className="h-11 w-11 shrink-0 object-contain"
+          width={44}
+          height={44}
+        />
         <div className="min-w-0">
           <div className="truncate text-sm font-semibold tracking-tight">AI Marketing Lab</div>
-          <div className="truncate text-[11px] text-muted-foreground">by MarkVision AI</div>
+          <div className="truncate text-[11px] text-muted-foreground">
+            {isAdmin ? "Admin · MarkVision AI" : "by MarkVision AI"}
+          </div>
         </div>
       </div>
 
       <div className="mx-4 h-px bg-border" />
 
-      {/* Nav */}
-      <nav className="flex-1 space-y-1 px-3 py-4">
+      <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
         {nav.map((item) => {
           const active = item.exact ? pathname === item.to : pathname.startsWith(item.to);
           const Icon = item.icon;
           return (
             <Link
               key={item.to}
-              to={item.to as string}
+              to={item.to as "/"}
               onClick={onNavigate}
               className={[
                 "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all",
@@ -73,22 +84,18 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
                 ].join(" ")}
               />
               <span className="truncate">{item.label}</span>
-              {active && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary" />}
+              {item.to === "/admin" && isAdmin && (
+                <span className="ml-auto rounded-full bg-primary/15 px-1.5 py-0.5 text-[10px] text-primary">
+                  live
+                </span>
+              )}
+              {active && item.to !== "/admin" && (
+                <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary" />
+              )}
             </Link>
           );
         })}
       </nav>
-
-      {/* Footer promo */}
-      <div className="m-3 rounded-2xl border border-border bg-gradient-to-br from-primary/15 to-transparent p-4">
-        <div className="text-xs font-medium text-foreground">Prodéжка Pro</div>
-        <div className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
-          Разблокируй продвинутые AI-агенты и приоритетную поддержку.
-        </div>
-        <button className="mt-3 w-full rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90">
-          Улучшить
-        </button>
-      </div>
     </div>
   );
 }
