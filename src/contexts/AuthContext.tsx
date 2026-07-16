@@ -31,6 +31,7 @@ type AuthContextValue = {
   }) => Promise<{ error?: string; needsConfirm?: boolean }>;
   signOut: () => Promise<void>;
   updateProfile: (patch: Partial<Profile>) => Promise<{ error?: string }>;
+  updatePassword: (password: string) => Promise<{ error?: string }>;
   uploadAvatar: (file: File) => Promise<{ error?: string; url?: string }>;
 };
 
@@ -218,6 +219,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [session?.user, updateProfile],
   );
 
+  const updatePassword = useCallback(async (password: string) => {
+    if (!supabase) return { error: "Supabase не настроен" };
+    if (!session?.user) return { error: "Сначала войди в аккаунт" };
+    if (password.length < 6) return { error: "Пароль должен быть не короче 6 символов" };
+    const { error } = await supabase.auth.updateUser({ password });
+    return error ? { error: error.message } : {};
+  }, [session?.user]);
+
   const value = useMemo<AuthContextValue>(
     () => ({
       ready,
@@ -249,9 +258,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setProfile(loadDemoProfile());
       },
       updateProfile,
+      updatePassword,
       uploadAvatar,
     }),
-    [ready, session, profile, refreshProfile, updateProfile, uploadAvatar],
+    [ready, session, profile, refreshProfile, updateProfile, updatePassword, uploadAvatar],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

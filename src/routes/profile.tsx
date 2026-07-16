@@ -1,6 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { Camera, Flame, LogOut, Trophy } from "lucide-react";
+import {
+  Building2,
+  Camera,
+  CheckCircle2,
+  Flame,
+  LogOut,
+  Medal,
+  Phone,
+  Save,
+  Send,
+  Settings,
+  Sparkles,
+  Trophy,
+  User,
+} from "lucide-react";
 import { achievements, user as mockUser } from "@/data/platform";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLiveProgress } from "@/hooks/useLiveProgress";
@@ -25,7 +40,9 @@ function Profile() {
   const [err, setErr] = useState("");
 
   useEffect(() => {
-    setFullName(profile?.full_name || live.displayName || (user ? "" : mockUser.name));
+    setFullName(
+      profile?.full_name || live.displayName || (user ? "" : mockUser.name),
+    );
     setCompany(profile?.company || (user ? "" : mockUser.company));
     setPhone(profile?.phone || (user ? "" : mockUser.phone));
     setTelegram(profile?.telegram || (user ? "" : mockUser.telegram));
@@ -34,9 +51,15 @@ function Profile() {
 
   const level = live.loggedIn ? live.level : mockUser.level;
   const xp = live.loggedIn ? live.xp : mockUser.xp;
-  const progress = live.loggedIn ? (live.companyProgress ?? 0) : mockUser.progress;
-  const unlocked = live.loggedIn ? 0 : achievements.filter((a) => a.unlocked).length;
+  const progress = live.loggedIn
+    ? (live.companyProgress ?? 0)
+    : mockUser.progress;
+  const unlockedCount = live.loggedIn
+    ? Math.min(live.tasksDone, achievements.length)
+    : achievements.filter((a) => a.unlocked).length;
   const initial = (fullName || "Ю").trim().charAt(0).toUpperCase();
+  const tasksDone = live.loggedIn ? live.tasksDone : mockUser.tasksDone;
+  const tasksTotal = live.loggedIn ? live.tasksTotal : mockUser.tasksTotal;
 
   async function onSave(e: React.FormEvent) {
     e.preventDefault();
@@ -51,7 +74,10 @@ function Profile() {
     });
     setSaving(false);
     if (res.error) setErr(res.error);
-    else setMsg(user ? "Данные сохранены в Supabase" : "Данные сохранены локально");
+    else
+      setMsg(
+        user ? "Данные сохранены в Supabase" : "Данные сохранены локально",
+      );
   }
 
   async function onPickPhoto(file: File | undefined) {
@@ -70,93 +96,195 @@ function Profile() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-10 lg:py-12">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <div className="text-xs uppercase tracking-widest text-muted-foreground">Профиль</div>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Твой профиль</h1>
-        </div>
-        {ready &&
-          (user ? (
-            <button
-              onClick={() => void signOut()}
-              className="inline-flex items-center gap-2 rounded-xl border border-border px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
-            >
-              <LogOut className="h-4 w-4" /> Выйти
-            </button>
-          ) : (
-            <Link
-              to="/login"
-              className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-            >
-              Войти
-            </Link>
-          ))}
-      </div>
-
-      <div
-        className={[
-          "mt-4 rounded-2xl border px-4 py-3 text-sm",
-          live.loggedIn
-            ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
-            : "border-border bg-card/60 text-muted-foreground",
-        ].join(" ")}
-      >
-        {live.loggedIn
-          ? "Можно менять фото и данные — сохраняется в Supabase"
-          : "Можно менять фото и данные локально. Войди — будет синхрон с Supabase."}
-      </div>
-
-      <div className="mt-8 overflow-hidden rounded-3xl border border-border bg-card">
-        <div className="relative h-28 bg-gradient-to-r from-primary/30 via-primary/10 to-transparent">
-          <div className="pointer-events-none absolute inset-0 grid-bg opacity-40" />
-        </div>
-        <div className="relative px-6 pb-8 sm:px-8">
-          <div className="-mt-12 flex flex-wrap items-end gap-5">
-            <div className="relative">
-              <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary to-[color:var(--accent-glow)] text-3xl font-semibold text-primary-foreground shadow-xl">
-                {avatarUrl ? (
-                  <img src={avatarUrl} alt={fullName} className="h-full w-full object-cover" />
-                ) : (
-                  initial
-                )}
-              </div>
-              <button
-                type="button"
-                disabled={uploading}
-                onClick={() => fileRef.current?.click()}
-                className="absolute -bottom-1 -right-1 flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-card text-foreground shadow-md hover:border-primary/50 disabled:opacity-60"
-                aria-label="Загрузить фото"
-              >
-                <Camera className="h-4 w-4" />
-              </button>
-              <input
-                ref={fileRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={(e) => void onPickPhoto(e.target.files?.[0])}
-              />
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-10 lg:py-12">
+      {/* HEADER */}
+      <div className="relative overflow-hidden rounded-3xl border border-border bg-card">
+        <div className="pointer-events-none absolute inset-0 grid-bg opacity-20" />
+        <div className="pointer-events-none absolute -right-16 -top-12 h-48 w-48 rounded-full bg-primary/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 left-1/4 h-40 w-40 rounded-full bg-[color:var(--accent-glow)]/15 blur-3xl" />
+        <div className="relative flex flex-col gap-5 p-6 sm:flex-row sm:items-end sm:justify-between sm:p-8">
+          <div>
+            <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
+              <User className="h-3.5 w-3.5 text-primary" /> Profile
             </div>
-            <div className="pb-1">
-              <h2 className="text-2xl font-semibold tracking-tight">{fullName || "Ученик"}</h2>
-              <button
-                type="button"
-                disabled={uploading}
-                onClick={() => fileRef.current?.click()}
-                className="mt-2 text-sm text-primary hover:underline disabled:opacity-60"
-              >
-                {uploading ? "Загружаю…" : "Загрузить своё фото"}
-              </button>
-              {user?.email && (
-                <div className="mt-1 text-xs text-muted-foreground">{user.email}</div>
+            <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+              Твой профиль
+            </h1>
+            <p className="mt-2 max-w-xl text-muted-foreground">
+              Фото, контакты и прогресс AI-компании. Данные сохраняются в аккаунте.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <div
+              className={[
+                "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs",
+                live.loggedIn
+                  ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
+                  : "border-border bg-background/50 text-muted-foreground",
+              ].join(" ")}
+            >
+              {live.loggedIn ? (
+                <>
+                  <CheckCircle2 className="h-3.5 w-3.5" /> Синхрон с Supabase
+                </>
+              ) : (
+                <>
+                  <Sparkles className="h-3.5 w-3.5" /> Локальный режим
+                </>
               )}
             </div>
+            {ready &&
+              (user ? (
+                <button
+                  type="button"
+                  onClick={() => void signOut()}
+                  className="inline-flex items-center gap-2 rounded-xl border border-border bg-background/50 px-4 py-2.5 text-sm text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                >
+                  <LogOut className="h-4 w-4" /> Выйти
+                </button>
+              ) : (
+                <Link
+                  to="/login"
+                  className="rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground"
+                >
+                  Войти
+                </Link>
+              ))}
           </div>
+        </div>
+      </div>
 
-          <form onSubmit={onSave} className="mt-8 space-y-3">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <Field label="Имя">
+      {!live.loggedIn && (
+        <div className="mt-5 rounded-2xl border border-border bg-card/80 px-4 py-3 text-sm text-muted-foreground">
+          Можно менять фото и данные локально.{" "}
+          <Link to="/login" className="text-primary hover:underline">
+            Войди
+          </Link>
+          , чтобы синхронизировать с Supabase.
+        </div>
+      )}
+
+      <div className="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <div className="space-y-5">
+          {/* IDENTITY */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="overflow-hidden rounded-3xl border border-border bg-card"
+          >
+            <div className="relative h-28 bg-gradient-to-r from-primary/35 via-primary/10 to-transparent">
+              <div className="pointer-events-none absolute inset-0 grid-bg opacity-35" />
+            </div>
+            <div className="relative px-5 pb-6 sm:px-6">
+              <div className="-mt-12 flex flex-wrap items-end gap-5">
+                <div className="relative">
+                  <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary to-[color:var(--accent-glow)] text-3xl font-semibold text-primary-foreground shadow-xl">
+                    {avatarUrl ? (
+                      <img
+                        src={avatarUrl}
+                        alt={fullName}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      initial
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    disabled={uploading}
+                    onClick={() => fileRef.current?.click()}
+                    className="absolute -bottom-1 -right-1 flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-card text-foreground shadow-md hover:border-primary/50 disabled:opacity-60"
+                    aria-label="Загрузить фото"
+                  >
+                    <Camera className="h-4 w-4" />
+                  </button>
+                  <input
+                    ref={fileRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => void onPickPhoto(e.target.files?.[0])}
+                  />
+                </div>
+                <div className="min-w-0 pb-1">
+                  <h2 className="truncate text-2xl font-semibold tracking-tight">
+                    {fullName || "Ученик"}
+                  </h2>
+                  <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+                    <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-xs text-primary">
+                      {level}
+                    </span>
+                    {company && <span>{company}</span>}
+                  </div>
+                  <button
+                    type="button"
+                    disabled={uploading}
+                    onClick={() => fileRef.current?.click()}
+                    className="mt-2 text-sm text-primary hover:underline disabled:opacity-60"
+                  >
+                    {uploading ? "Загружаю…" : "Загрузить своё фото"}
+                  </button>
+                  {user?.email && (
+                    <div className="mt-1 text-xs text-muted-foreground">
+                      {user.email}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-6 grid grid-cols-3 gap-3">
+                <MiniStat
+                  icon={<Flame className="h-3.5 w-3.5 text-primary" />}
+                  label="Level"
+                  value={String(level)}
+                />
+                <MiniStat label="Опыт" value={`${xp} XP`} />
+                <MiniStat
+                  icon={<Trophy className="h-3.5 w-3.5 text-primary" />}
+                  label="Достижения"
+                  value={`${unlockedCount}/${achievements.length}`}
+                />
+              </div>
+
+              <div className="mt-5">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">
+                    Готовность AI-компании
+                  </span>
+                  <span className="font-medium">{progress}%</span>
+                </div>
+                <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-muted">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-primary to-[color:var(--accent-glow)]"
+                    style={{ width: `${Math.min(progress, 100)}%` }}
+                  />
+                </div>
+                <div className="mt-2 text-[11px] text-muted-foreground">
+                  Этапов пройдено: {tasksDone}/{tasksTotal}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* FORM */}
+          <motion.form
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            onSubmit={onSave}
+            className="rounded-3xl border border-border bg-card p-5 sm:p-6"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <h3 className="text-lg font-semibold tracking-tight">Данные</h3>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Имя и контакты для связи и рейтинга
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <Field label="Имя" icon={<User className="h-3.5 w-3.5" />}>
                 <input
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
@@ -164,7 +292,10 @@ function Profile() {
                   className="h-11 w-full rounded-xl border border-border bg-background/50 px-4 text-sm outline-none focus:border-primary/50"
                 />
               </Field>
-              <Field label="Компания">
+              <Field
+                label="Компания"
+                icon={<Building2 className="h-3.5 w-3.5" />}
+              >
                 <input
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
@@ -172,7 +303,10 @@ function Profile() {
                   className="h-11 w-full rounded-xl border border-border bg-background/50 px-4 text-sm outline-none focus:border-primary/50"
                 />
               </Field>
-              <Field label="Телефон / WhatsApp">
+              <Field
+                label="Телефон / WhatsApp"
+                icon={<Phone className="h-3.5 w-3.5" />}
+              >
                 <input
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
@@ -180,7 +314,7 @@ function Profile() {
                   className="h-11 w-full rounded-xl border border-border bg-background/50 px-4 text-sm outline-none focus:border-primary/50"
                 />
               </Field>
-              <Field label="Telegram">
+              <Field label="Telegram" icon={<Send className="h-3.5 w-3.5" />}>
                 <input
                   value={telegram}
                   onChange={(e) => setTelegram(e.target.value)}
@@ -190,87 +324,207 @@ function Profile() {
               </Field>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3 pt-2">
+            <div className="mt-5 flex flex-wrap items-center gap-3">
               <button
                 type="submit"
                 disabled={saving}
-                className="rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground disabled:opacity-60"
+                className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground disabled:opacity-60"
               >
+                <Save className="h-4 w-4" />
                 {saving ? "Сохраняю…" : "Сохранить данные"}
               </button>
-              {msg && <span className="text-sm text-emerald-400">{msg}</span>}
+              {msg && (
+                <span className="inline-flex items-center gap-1.5 text-sm text-emerald-400">
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  {msg}
+                </span>
+              )}
               {err && <span className="text-sm text-red-400">{err}</span>}
             </div>
-          </form>
+          </motion.form>
 
-          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <div className="rounded-2xl border border-border bg-background/50 p-5">
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Flame className="h-3.5 w-3.5 text-primary" /> Level
+          {/* ACHIEVEMENTS */}
+          <div className="rounded-3xl border border-border bg-card p-5 sm:p-6">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <h3 className="text-lg font-semibold tracking-tight">
+                  Достижения
+                </h3>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Открыто {unlockedCount} из {achievements.length}
+                </p>
               </div>
-              <div className="mt-2 text-xl font-semibold">{level}</div>
+              <Link
+                to="/leaderboard"
+                className="text-sm text-primary hover:underline"
+              >
+                Leaderboard →
+              </Link>
             </div>
-            <div className="rounded-2xl border border-border bg-background/50 p-5">
-              <div className="text-xs text-muted-foreground">Опыт</div>
-              <div className="mt-2 text-xl font-semibold">{xp} XP</div>
-            </div>
-            <div className="rounded-2xl border border-border bg-background/50 p-5">
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Trophy className="h-3.5 w-3.5 text-primary" /> Достижения
-              </div>
-              <div className="mt-2 text-xl font-semibold">{unlocked}</div>
+            <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {achievements.map((a, i) => {
+                const open = live.loggedIn
+                  ? i < unlockedCount
+                  : a.unlocked;
+                return (
+                  <div
+                    key={a.id}
+                    className={[
+                      "flex items-center gap-3 rounded-2xl border px-3.5 py-3",
+                      open
+                        ? "border-primary/25 bg-primary/10"
+                        : "border-border bg-background/40 opacity-55",
+                    ].join(" ")}
+                  >
+                    <div
+                      className={[
+                        "flex h-9 w-9 items-center justify-center rounded-xl",
+                        open
+                          ? "bg-primary/20 text-primary"
+                          : "bg-muted text-muted-foreground",
+                      ].join(" ")}
+                    >
+                      <Medal className="h-4 w-4" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="truncate text-sm font-medium">
+                        {a.title}
+                      </div>
+                      <div className="text-[11px] text-muted-foreground">
+                        {open ? "Открыто" : "Закрыто"}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
+        </div>
 
-          <div className="mt-6">
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Готовность AI-компании</span>
-              <span className="font-medium">{progress}%</span>
+        {/* SIDEBAR */}
+        <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
+          <div className="rounded-3xl border border-primary/30 bg-primary/10 p-5">
+            <div className="flex items-center gap-2 text-sm font-semibold">
+              <Flame className="h-4 w-4 text-primary" /> Твой статус
             </div>
-            <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-muted">
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-primary to-[color:var(--accent-glow)]"
-                style={{ width: `${progress}%` }}
+            <div className="mt-4 space-y-3">
+              <StatusRow label="Роль" value={String(level)} />
+              <StatusRow label="XP" value={String(xp)} />
+              <StatusRow label="Готовность" value={`${progress}%`} />
+              <StatusRow
+                label="Этапы"
+                value={`${tasksDone}/${tasksTotal}`}
               />
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-6">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Получено достижений</h3>
-          <Link to="/leaderboard" className="text-sm text-primary hover:underline">
-            Leaderboard
-          </Link>
-        </div>
-        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-          {achievements.map((a) => {
-            const open = live.loggedIn ? false : a.unlocked;
-            return (
+            <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-background/50">
               <div
-                key={a.id}
-                className={[
-                  "rounded-2xl border p-4 text-center",
-                  open ? "border-primary/30 bg-primary/10" : "border-border bg-card opacity-45",
-                ].join(" ")}
-              >
-                <div className="text-2xl">{a.emoji}</div>
-                <div className="mt-2 text-sm font-medium">{a.title}</div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+                className="h-full rounded-full bg-primary"
+                style={{ width: `${Math.min(progress, 100)}%` }}
+              />
+            </div>
+            <Link
+              to="/mission-control"
+              className="mt-4 inline-flex text-sm text-primary hover:underline"
+            >
+              Открыть Mission Control →
+            </Link>
+          </div>
 
+          <div className="rounded-3xl border border-border bg-card p-5">
+            <div className="text-sm font-semibold">Быстрые ссылки</div>
+            <div className="mt-3 space-y-2">
+              <QuickLink to="/leaderboard" label="Leaderboard" icon={Trophy} />
+              <QuickLink to="/settings" label="Настройки" icon={Settings} />
+              <QuickLink to="/" label="Dashboard" icon={Sparkles} />
+            </div>
+          </div>
+
+          {!user && (
+            <div className="rounded-3xl border border-border bg-card p-5">
+              <div className="text-sm font-semibold">Сохрани прогресс</div>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                Войди в аккаунт — профиль, этапы и фото будут в облаке.
+              </p>
+              <Link
+                to="/signup"
+                className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground"
+              >
+                Создать аккаунт
+              </Link>
+            </div>
+          )}
+        </aside>
+      </div>
     </div>
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function MiniStat({
+  label,
+  value,
+  icon,
+}: {
+  label: string;
+  value: string;
+  icon?: React.ReactNode;
+}) {
+  return (
+    <div className="rounded-2xl border border-border bg-background/50 px-3 py-3">
+      <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+        {icon}
+        {label}
+      </div>
+      <div className="mt-1 truncate text-sm font-semibold sm:text-base">
+        {value}
+      </div>
+    </div>
+  );
+}
+
+function StatusRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between gap-3 text-sm">
+      <span className="text-muted-foreground">{label}</span>
+      <span className="font-medium">{value}</span>
+    </div>
+  );
+}
+
+function QuickLink({
+  to,
+  label,
+  icon: Icon,
+}: {
+  to: "/leaderboard" | "/settings" | "/";
+  label: string;
+  icon: typeof Trophy;
+}) {
+  return (
+    <Link
+      to={to}
+      className="flex items-center justify-between rounded-xl border border-border bg-background/40 px-3 py-2.5 text-sm hover:border-primary/35"
+    >
+      {label}
+      <Icon className="h-3.5 w-3.5 text-primary" />
+    </Link>
+  );
+}
+
+function Field({
+  label,
+  icon,
+  children,
+}: {
+  label: string;
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+}) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-xs text-muted-foreground">{label}</span>
+      <span className="mb-1.5 flex items-center gap-1.5 text-xs text-muted-foreground">
+        {icon}
+        {label}
+      </span>
       {children}
     </label>
   );
