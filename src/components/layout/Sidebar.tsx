@@ -12,7 +12,14 @@ import {
 } from "lucide-react";
 import logoAsset from "@/assets/markvision-logo.png.asset.json";
 
-const nav = [
+type NavItem = {
+  to: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+  exact?: boolean;
+};
+
+const nav: NavItem[] = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/mission-control", label: "AI Mission Control", icon: Network },
   { to: "/lessons", label: "Уроки", icon: GraduationCap },
@@ -22,7 +29,7 @@ const nav = [
   { to: "/community", label: "Сообщество", icon: Users },
   { to: "/profile", label: "Профиль", icon: User },
   { to: "/settings", label: "Настройки", icon: Settings },
-] as const;
+];
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
