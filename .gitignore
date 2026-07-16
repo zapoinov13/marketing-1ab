@@ -31,9 +31,10 @@ dist-ssr
 *.sln
 *.sw?
 
-# Env
-.env
-.env.*
+# Env — Lovable requires committed `.env` with public VITE_* keys.
+# Keep secrets/overrides in `.env.local` only (gitignored).
+.env.local
+.env.*.local
 !.env.example
 .vercel
 supabase/.temp/
