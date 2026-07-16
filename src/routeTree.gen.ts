@@ -9,38 +9,214 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as MissionControlRouteImport } from './routes/mission-control'
+import { Route as LessonsRouteImport } from './routes/lessons'
+import { Route as HomeworkRouteImport } from './routes/homework'
+import { Route as DocsRouteImport } from './routes/docs'
+import { Route as CommunityRouteImport } from './routes/community'
+import { Route as AssistantRouteImport } from './routes/assistant'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LessonsStageIdRouteImport } from './routes/lessons.$stageId'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MissionControlRoute = MissionControlRouteImport.update({
+  id: '/mission-control',
+  path: '/mission-control',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LessonsRoute = LessonsRouteImport.update({
+  id: '/lessons',
+  path: '/lessons',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeworkRoute = HomeworkRouteImport.update({
+  id: '/homework',
+  path: '/homework',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsRoute = DocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityRoute = CommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssistantRoute = AssistantRouteImport.update({
+  id: '/assistant',
+  path: '/assistant',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LessonsStageIdRoute = LessonsStageIdRouteImport.update({
+  id: '/$stageId',
+  path: '/$stageId',
+  getParentRoute: () => LessonsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/assistant': typeof AssistantRoute
+  '/community': typeof CommunityRoute
+  '/docs': typeof DocsRoute
+  '/homework': typeof HomeworkRoute
+  '/lessons': typeof LessonsRouteWithChildren
+  '/mission-control': typeof MissionControlRoute
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/lessons/$stageId': typeof LessonsStageIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/assistant': typeof AssistantRoute
+  '/community': typeof CommunityRoute
+  '/docs': typeof DocsRoute
+  '/homework': typeof HomeworkRoute
+  '/lessons': typeof LessonsRouteWithChildren
+  '/mission-control': typeof MissionControlRoute
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/lessons/$stageId': typeof LessonsStageIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/assistant': typeof AssistantRoute
+  '/community': typeof CommunityRoute
+  '/docs': typeof DocsRoute
+  '/homework': typeof HomeworkRoute
+  '/lessons': typeof LessonsRouteWithChildren
+  '/mission-control': typeof MissionControlRoute
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/lessons/$stageId': typeof LessonsStageIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/assistant'
+    | '/community'
+    | '/docs'
+    | '/homework'
+    | '/lessons'
+    | '/mission-control'
+    | '/profile'
+    | '/settings'
+    | '/lessons/$stageId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/assistant'
+    | '/community'
+    | '/docs'
+    | '/homework'
+    | '/lessons'
+    | '/mission-control'
+    | '/profile'
+    | '/settings'
+    | '/lessons/$stageId'
+  id:
+    | '__root__'
+    | '/'
+    | '/assistant'
+    | '/community'
+    | '/docs'
+    | '/homework'
+    | '/lessons'
+    | '/mission-control'
+    | '/profile'
+    | '/settings'
+    | '/lessons/$stageId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AssistantRoute: typeof AssistantRoute
+  CommunityRoute: typeof CommunityRoute
+  DocsRoute: typeof DocsRoute
+  HomeworkRoute: typeof HomeworkRoute
+  LessonsRoute: typeof LessonsRouteWithChildren
+  MissionControlRoute: typeof MissionControlRoute
+  ProfileRoute: typeof ProfileRoute
+  SettingsRoute: typeof SettingsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mission-control': {
+      id: '/mission-control'
+      path: '/mission-control'
+      fullPath: '/mission-control'
+      preLoaderRoute: typeof MissionControlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lessons': {
+      id: '/lessons'
+      path: '/lessons'
+      fullPath: '/lessons'
+      preLoaderRoute: typeof LessonsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/homework': {
+      id: '/homework'
+      path: '/homework'
+      fullPath: '/homework'
+      preLoaderRoute: typeof HomeworkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs': {
+      id: '/docs'
+      path: '/docs'
+      fullPath: '/docs'
+      preLoaderRoute: typeof DocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community': {
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assistant': {
+      id: '/assistant'
+      path: '/assistant'
+      fullPath: '/assistant'
+      preLoaderRoute: typeof AssistantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +224,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lessons/$stageId': {
+      id: '/lessons/$stageId'
+      path: '/$stageId'
+      fullPath: '/lessons/$stageId'
+      preLoaderRoute: typeof LessonsStageIdRouteImport
+      parentRoute: typeof LessonsRoute
+    }
   }
 }
 
+interface LessonsRouteChildren {
+  LessonsStageIdRoute: typeof LessonsStageIdRoute
+}
+
+const LessonsRouteChildren: LessonsRouteChildren = {
+  LessonsStageIdRoute: LessonsStageIdRoute,
+}
+
+const LessonsRouteWithChildren =
+  LessonsRoute._addFileChildren(LessonsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AssistantRoute: AssistantRoute,
+  CommunityRoute: CommunityRoute,
+  DocsRoute: DocsRoute,
+  HomeworkRoute: HomeworkRoute,
+  LessonsRoute: LessonsRouteWithChildren,
+  MissionControlRoute: MissionControlRoute,
+  ProfileRoute: ProfileRoute,
+  SettingsRoute: SettingsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
