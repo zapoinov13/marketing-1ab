@@ -55,41 +55,46 @@ function Leaderboard() {
     "Юрий";
   const avatarUrl = profile?.avatar_url || null;
   const initial = displayName.trim().charAt(0).toUpperCase() || "Ю";
-  const myProgress = live.loggedIn
-    ? (live.companyProgress ?? 0)
-    : (leaderboard.find((r) => r.isYou)?.progress ?? 38);
-  const myLevel = live.loggedIn
-    ? live.level
-    : String(leaderboard.find((r) => r.isYou)?.level ?? 10);
-  const myRole = (live.loggedIn
-    ? live.level
-    : leaderboard.find((r) => r.isYou)?.role) as string;
+  const myProgress = live.loggedIn ? (live.companyProgress ?? 0) : 0;
+  const myLevelNum = 1;
+  const myRoleResolved: RankRole = (
+    [
+      "Builder",
+      "AI Architect",
+      "Automation Master",
+      "Content Engineer",
+      "AI CEO",
+    ] as RankRole[]
+  ).includes((live.loggedIn ? live.level : "Builder") as RankRole)
+    ? ((live.loggedIn ? live.level : "Builder") as RankRole)
+    : "Builder";
 
   const rows = useMemo(() => {
-    return leaderboard.map((row) => {
+    const base =
+      leaderboard.length > 0
+        ? leaderboard
+        : [
+            {
+              rank: 1,
+              name: displayName,
+              progress: myProgress,
+              level: myLevelNum,
+              role: myRoleResolved,
+              isYou: true as const,
+            },
+          ];
+
+    return base.map((row) => {
       if (!row.isYou) return row;
       return {
         ...row,
         name: displayName,
         progress: myProgress,
-        level:
-          typeof myLevel === "string" && /^\d+$/.test(myLevel)
-            ? Number(myLevel)
-            : row.level,
-        role: (
-          [
-            "Builder",
-            "AI Architect",
-            "Automation Master",
-            "Content Engineer",
-            "AI CEO",
-          ] as RankRole[]
-        ).includes(myRole as RankRole)
-          ? (myRole as RankRole)
-          : row.role,
+        level: myLevelNum,
+        role: myRoleResolved,
       };
     });
-  }, [displayName, myProgress, myLevel, myRole]);
+  }, [displayName, myProgress, myLevelNum, myRoleResolved]);
 
   const sorted = useMemo(() => {
     const filtered =

@@ -6,6 +6,7 @@ import {
   missionStages,
   type StageStatus,
 } from "@/data/platform";
+import { DATA_RESET_VERSION } from "@/lib/wipeLocalData";
 
 export type StageProgressRow = {
   stage_id: string;
@@ -18,6 +19,47 @@ const ZERO_SEED: StageProgressRow[] = missionStages.map((s, i) => ({
   status: (i === 0 ? "active" : "locked") as StageStatus,
   progress: 0,
 }));
+
+async function forceZeroOwnProgress(userId: string) {
+  if (!supabase) return;
+  const flagKey = `aml-cloud-zeroed:${DATA_RESET_VERSION}:${userId}`;
+  try {
+    if (localStorage.getItem(flagKey) === "1") return;
+  } catch {
+    /* continue reset */
+  }
+
+  await supabase
+    .from("profiles")
+    .update({
+      progress: 0,
+      xp: 0,
+      level: "Builder",
+      updated_at: new Date().toISOString(),
+    } as never)
+    .eq("id", userId);
+
+  const seed = ZERO_SEED.map((r) => ({
+    user_id: userId,
+    stage_id: r.stage_id,
+    status: r.status,
+    progress: 0,
+    updated_at: new Date().toISOString(),
+  }));
+
+  await supabase.from("stage_progress").upsert(seed as never, {
+    onConflict: "user_id,stage_id",
+  });
+
+  await supabase.from("checklist_items").delete().eq("user_id", userId);
+  await supabase.from("homework_submissions").delete().eq("user_id", userId);
+
+  try {
+    localStorage.setItem(flagKey, "1");
+  } catch {
+    /* ignore */
+  }
+}
 
 export function useLiveProgress() {
   const { user, profile, ready, refreshProfile } = useAuth();
@@ -55,6 +97,9 @@ export function useLiveProgress() {
         { onConflict: "id" },
       );
     }
+
+    // One-time hard reset after DATA_RESET_VERSION bump
+    await forceZeroOwnProgress(user.id);
 
     let { data: prog } = await supabase
       .from("stage_progress")
@@ -103,7 +148,6 @@ export function useLiveProgress() {
 
   const liveCompanyBuild = useMemo(() => {
     if (!user || rows.length === 0) return mockCompanyBuild;
-    // map first 7 mission stages onto companyBuild slots
     return mockCompanyBuild.map((block, i) => {
       const stageId = String(i + 1);
       const row = rows.find((r) => r.stage_id === stageId);

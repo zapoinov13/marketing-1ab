@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { wipeLocalDataIfNeeded } from "../lib/wipeLocalData";
 import { AppShell } from "../components/layout/AppShell";
 import { AuthProvider } from "../contexts/AuthContext";
 import { HomeworkProvider } from "../contexts/HomeworkContext";
@@ -131,6 +132,7 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  wipeLocalDataIfNeeded();
 
   return (
     <QueryClientProvider client={queryClient}>

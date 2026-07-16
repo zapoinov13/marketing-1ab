@@ -52,9 +52,9 @@ function Dashboard() {
     profile?.full_name ||
     user?.email?.split("@")[0] ||
     "Ученик";
-  const progress = live.loggedIn ? (live.companyProgress ?? 0) : 38;
-  const level = live.loggedIn ? live.level : "AI Builder";
-  const xp = live.loggedIn ? live.xp : 640;
+  const progress = live.loggedIn ? (live.companyProgress ?? 0) : 0;
+  const level = live.loggedIn ? live.level : "Builder";
+  const xp = live.loggedIn ? live.xp : 0;
   const avatarUrl = profile?.avatar_url || null;
 
   const stageRows = live.loggedIn

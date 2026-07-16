@@ -14,23 +14,23 @@ export type DocCategory =
   | "openai";
 
 export const user = {
-  name: "Юрий",
-  company: "Стоматология Уали",
-  phone: "+7 777 000 00 00",
-  telegram: "@yuriy",
-  level: "AI Builder",
-  xp: 640,
-  progress: 38,
-  tasksDone: 18,
-  tasksTotal: 54,
-  achievementsCount: 18,
-  avatarInitial: "Ю",
+  name: "Ученик",
+  company: "",
+  phone: "",
+  telegram: "",
+  level: "Builder",
+  xp: 0,
+  progress: 0,
+  tasksDone: 0,
+  tasksTotal: 8,
+  achievementsCount: 0,
+  avatarInitial: "У",
 };
 
 export const nextClass = {
-  title: "Этап 4. AI-Таргетолог",
-  countdown: "1 день 4 часа",
-  href: "/lessons/4",
+  title: "Этап 1. Фундамент",
+  countdown: "Старт",
+  href: "/lessons/1",
 };
 
 export type MissionStage = {
@@ -54,8 +54,8 @@ export const missionStages: MissionStage[] = [
     number: 1,
     title: "Фундамент",
     subtitle: "AI mindset и базовая инфраструктура",
-    status: "done",
-    progress: 100,
+    status: "active",
+    progress: 0,
     description:
       "Закладываем фундамент AI-компании: аккаунты, инструменты, мышление и рабочий процесс.",
     whatToDo: [
@@ -70,9 +70,9 @@ export const missionStages: MissionStage[] = [
     ],
     homework: "Оформить профиль и описать свою будущую AI-команду",
     checklist: [
-      { id: "1a", text: "Аккаунты созданы", done: true },
-      { id: "1b", text: "Первый промпт написан", done: true },
-      { id: "1c", text: "Репозиторий создан", done: true },
+      { id: "1a", text: "Аккаунты созданы", done: false },
+      { id: "1b", text: "Первый промпт написан", done: false },
+      { id: "1c", text: "Репозиторий создан", done: false },
     ],
   },
   {
@@ -80,8 +80,8 @@ export const missionStages: MissionStage[] = [
     number: 2,
     title: "AI Brain",
     subtitle: "Claude Code как мозг компании",
-    status: "done",
-    progress: 100,
+    status: "locked",
+    progress: 0,
     description: "Подключаем AI Brain — Claude Code, правила, навыки и систему памяти.",
     whatToDo: [
       "Установить Claude Code",
@@ -95,9 +95,9 @@ export const missionStages: MissionStage[] = [
     ],
     homework: "Собрать свой первый skill и проверить на реальной задаче",
     checklist: [
-      { id: "2a", text: "Claude Code установлен", done: true },
-      { id: "2b", text: "Первый skill готов", done: true },
-      { id: "2c", text: "Правила проекта написаны", done: true },
+      { id: "2a", text: "Claude Code установлен", done: false },
+      { id: "2b", text: "Первый skill готов", done: false },
+      { id: "2c", text: "Правила проекта написаны", done: false },
     ],
   },
   {
@@ -105,8 +105,8 @@ export const missionStages: MissionStage[] = [
     number: 3,
     title: "Developer",
     subtitle: "Первый сайт и деплой",
-    status: "active",
-    progress: 45,
+    status: "locked",
+    progress: 0,
     description: "Собираем сайт компании: дизайн, код, деплой на Vercel / Hostinger.",
     whatToDo: [
       "Собрать лендинг в Lovable",
@@ -120,7 +120,7 @@ export const missionStages: MissionStage[] = [
     ],
     homework: "Опубликовать лендинг и прислать ссылку",
     checklist: [
-      { id: "3a", text: "Макет готов", done: true },
+      { id: "3a", text: "Макет готов", done: false },
       { id: "3b", text: "Сайт задеплоен", done: false },
       { id: "3c", text: "Домен подключен", done: false },
     ],
@@ -130,7 +130,7 @@ export const missionStages: MissionStage[] = [
     number: 4,
     title: "Marketing",
     subtitle: "AI-таргетолог и реклама",
-    status: "todo",
+    status: "locked",
     progress: 0,
     description: "Подключаем AI Targetologist: Meta Ads, офферы, креативы, аналитика.",
     whatToDo: [
@@ -215,9 +215,9 @@ export const missionStages: MissionStage[] = [
 ];
 
 export const companyBuild = [
-  { key: "foundation", label: "Фундамент", icon: "🏗", status: "done" as const },
-  { key: "brain", label: "AI Brain", icon: "🧠", status: "done" as const },
-  { key: "dev", label: "Developer", icon: "🌐", status: "active" as const },
+  { key: "foundation", label: "Фундамент", icon: "🏗", status: "active" as const },
+  { key: "brain", label: "AI Brain", icon: "🧠", status: "locked" as const },
+  { key: "dev", label: "Developer", icon: "🌐", status: "locked" as const },
   { key: "marketing", label: "Marketing", icon: "📢", status: "locked" as const },
   { key: "content", label: "Content", icon: "🎨", status: "locked" as const },
   { key: "analytics", label: "Analytics", icon: "📊", status: "locked" as const },
@@ -238,16 +238,16 @@ export const aiTeam: AiAgent[] = [
     id: "targetologist",
     name: "AI Targetologist",
     emoji: "🤖",
-    status: "online",
-    statusLabel: "Online",
+    status: "locked",
+    statusLabel: "Locked",
     role: "Реклама и офферы",
   },
   {
     id: "content",
     name: "Content Factory",
     emoji: "🎨",
-    status: "ready",
-    statusLabel: "Ready",
+    status: "locked",
+    statusLabel: "Locked",
     role: "Контент и креативы",
   },
   {
@@ -308,7 +308,7 @@ export const lessons: LessonCard[] = [
       "Какие аккаунты создать в первый день.",
       "Как писать первый рабочий промпт под свой бизнес.",
     ],
-    status: "done",
+    status: "active",
     documents: [
       { title: "Чеклист старта.pdf", type: "pdf" },
       { title: "Список аккаунтов.md", type: "doc" },
@@ -330,7 +330,7 @@ export const lessons: LessonCard[] = [
       "CLAUDE.md — правила и контекст бизнеса.",
       "Первый skill под повторяющуюся задачу.",
     ],
-    status: "done",
+    status: "locked",
     documents: [
       { title: "Установка Claude Code.pdf", type: "pdf" },
       { title: "Пример CLAUDE.md", type: "doc" },
@@ -351,7 +351,7 @@ export const lessons: LessonCard[] = [
       "Деплой на Vercel и привязка домена.",
       "Что должно быть на первом экране сайта.",
     ],
-    status: "active",
+    status: "locked",
     documents: [
       { title: "Бриф лендинга.pdf", type: "pdf" },
       { title: "Чеклист деплоя.md", type: "doc" },
@@ -622,7 +622,7 @@ export const homeworkTasks: HomeworkTask[] = [
     id: "hw-1",
     stage: "Этап 1",
     title: "Описать AI-команду",
-    deadline: "20 июля",
+    deadline: "Без срока",
     status: "active",
     description: "Опиши 5 ролей своей будущей AI-команды и задачи каждой.",
     videoTitle: "Архитектура AI-команды",
@@ -631,7 +631,7 @@ export const homeworkTasks: HomeworkTask[] = [
     id: "hw-2",
     stage: "Этап 1",
     title: "Создать GitHub репозиторий",
-    deadline: "22 июля",
+    deadline: "Без срока",
     status: "active",
     description: "Создай репозиторий курса и сделай первый push.",
     videoTitle: "GitHub за 15 минут",
@@ -640,7 +640,7 @@ export const homeworkTasks: HomeworkTask[] = [
     id: "hw-3",
     stage: "Этап 2",
     title: "Написать первый skill",
-    deadline: "25 июля",
+    deadline: "Без срока",
     status: "active",
     description: "Создай skill для Claude Code под одну повторяющуюся задачу бизнеса.",
     videoTitle: "Skills в Claude Code",
@@ -649,7 +649,7 @@ export const homeworkTasks: HomeworkTask[] = [
     id: "hw-4",
     stage: "Этап 2",
     title: "Настроить CLAUDE.md",
-    deadline: "27 июля",
+    deadline: "Без срока",
     status: "active",
     description: "Добавь правила проекта, контекст бизнеса и запреты.",
     videoTitle: "Правила проекта",
@@ -658,7 +658,7 @@ export const homeworkTasks: HomeworkTask[] = [
     id: "hw-5",
     stage: "Этап 3",
     title: "Создать Landing",
-    deadline: "30 июля",
+    deadline: "Без срока",
     status: "active",
     description:
       "Собери лендинг для своего бизнеса: оффер, преимущества, CTA и форма заявки. Опубликуй и пришли ссылку.",
@@ -670,16 +670,15 @@ export function getHomework(id: string) {
   return homeworkTasks.find((t) => t.id === id) ?? homeworkTasks[0];
 }
 
-export const activityFeed = [
-  { title: "Завершён урок «Claude Code»", time: "2 часа назад", type: "lesson" },
-  { title: "Достижение «Первый сайт» почти открыто", time: "вчера", type: "achievement" },
-  { title: "Сдано ДЗ: Описать AI-команду", time: "2 дня назад", type: "homework" },
-  { title: "AI Targetologist переведён в Online", time: "3 дня назад", type: "agent" },
-];
+export const activityFeed: {
+  title: string;
+  time: string;
+  type: string;
+}[] = [];
 
 export const achievements = [
-  { id: "site", title: "Первый сайт", emoji: "🏆", unlocked: true },
-  { id: "agent", title: "Первый агент", emoji: "🏆", unlocked: true },
+  { id: "site", title: "Первый сайт", emoji: "🏆", unlocked: false },
+  { id: "agent", title: "Первый агент", emoji: "🏆", unlocked: false },
   { id: "client", title: "Первый клиент", emoji: "🏆", unlocked: false },
   { id: "report", title: "Первый отчёт", emoji: "🏆", unlocked: false },
   { id: "content", title: "Контент завод", emoji: "🏆", unlocked: false },
@@ -694,49 +693,29 @@ export type RankRole =
   | "Content Engineer"
   | "AI CEO";
 
-export const leaderboard = [
-  { rank: 1, name: "Алексей", progress: 96, level: 12, role: "AI CEO" as RankRole },
-  { rank: 2, name: "Арман", progress: 91, level: 11, role: "AI Architect" as RankRole },
-  { rank: 3, name: "Юрий", progress: 88, level: 10, role: "Builder" as RankRole, isYou: true },
-  { rank: 4, name: "Мария", progress: 84, level: 9, role: "Content Engineer" as RankRole },
-  { rank: 5, name: "Данияр", progress: 79, level: 8, role: "Automation Master" as RankRole },
-  { rank: 6, name: "Алина", progress: 74, level: 8, role: "Builder" as RankRole },
-  { rank: 7, name: "Нурлан", progress: 71, level: 7, role: "Builder" as RankRole },
-  { rank: 8, name: "Сабина", progress: 68, level: 7, role: "Content Engineer" as RankRole },
-];
+export const leaderboard: Array<{
+  rank: number;
+  name: string;
+  progress: number;
+  level: number;
+  role: RankRole;
+  isYou?: boolean;
+}> = [];
 
-export const communityPosts = [
-  {
-    id: "1",
-    author: "Алексей",
-    role: "AI CEO",
-    text: "Запустил свою AI-команду: сайт + Meta + ежедневный отчёт. Компания на 96%.",
-    likes: 24,
-    tag: "Лучшие проекты недели",
-  },
-  {
-    id: "2",
-    author: "Мария",
-    role: "Content Engineer",
-    text: "Собрала Content Factory на 5 шаблонов рилсов. Кому скинуть структуру?",
-    likes: 18,
-    tag: "Работы учеников",
-  },
-  {
-    id: "3",
-    author: "Арман",
-    role: "AI Architect",
-    text: "Подключил n8n → Telegram напоминания. Теперь не забываю сдавать домашки.",
-    likes: 15,
-    tag: "Общий чат",
-  },
-];
+export const communityPosts: {
+  id: string;
+  author: string;
+  role: string;
+  text: string;
+  likes: number;
+  tag: string;
+}[] = [];
 
-export const topBuilders = [
-  { name: "Алексей", score: "96%", badge: "AI CEO" },
-  { name: "Арман", score: "91%", badge: "AI Architect" },
-  { name: "Юрий", score: "88%", badge: "Builder" },
-];
+export const topBuilders: Array<{
+  name: string;
+  score: string;
+  badge: string;
+}> = [];
 
 export const assistantQuickActions = [
   "Помоги подключить Meta",

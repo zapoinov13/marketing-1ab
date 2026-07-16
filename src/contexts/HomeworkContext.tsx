@@ -13,7 +13,7 @@ import {
   type HomeworkTask,
 } from "@/data/platform";
 
-const STORAGE_KEY = "aml-homework-tasks-v2";
+const STORAGE_KEY = "aml-homework-tasks-v3";
 
 export type NewHomeworkInput = {
   title: string;
