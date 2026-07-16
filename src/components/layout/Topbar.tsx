@@ -14,9 +14,12 @@ export function Topbar({
 }) {
   const { user, profile, ready } = useAuth();
   const live = useLiveProgress();
-  const progress = live.loggedIn ? (live.companyProgress ?? 0) : mockUser.progress;
+  const progress = live.loggedIn ? (live.companyProgress ?? 0) : 0;
   const initial =
-    (live.displayName || user?.email || mockUser.name).trim().charAt(0).toUpperCase() || "Ю";
+    (live.displayName || user?.email || mockUser.name || "У")
+      .trim()
+      .charAt(0)
+      .toUpperCase() || "У";
   const avatarUrl = profile?.avatar_url || null;
 
   return (

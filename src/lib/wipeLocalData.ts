@@ -1,5 +1,5 @@
 /** Bump this to wipe local demo/progress caches once after deploy. */
-export const DATA_RESET_VERSION = "2026-07-16-zero";
+export const DATA_RESET_VERSION = "2026-07-16-zero-v2";
 
 const VERSION_KEY = "aml-data-reset-version";
 
