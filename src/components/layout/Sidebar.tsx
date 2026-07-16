@@ -57,7 +57,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
           return (
             <Link
               key={item.to}
-              to={item.to}
+              to={item.to as string}
               onClick={onNavigate}
               className={[
                 "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all",
