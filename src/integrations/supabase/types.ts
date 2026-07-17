@@ -130,6 +130,48 @@ export type Database = {
         };
         Relationships: [];
       };
+      lesson_content: {
+        Row: {
+          stage_id: string;
+          title: string | null;
+          duration: string | null;
+          description: string | null;
+          about: Json;
+          video_embed_url: string | null;
+          homework: string | null;
+          documents: Json;
+          links: Json;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          stage_id: string;
+          title?: string | null;
+          duration?: string | null;
+          description?: string | null;
+          about?: Json;
+          video_embed_url?: string | null;
+          homework?: string | null;
+          documents?: Json;
+          links?: Json;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          stage_id?: string;
+          title?: string | null;
+          duration?: string | null;
+          description?: string | null;
+          about?: Json;
+          video_embed_url?: string | null;
+          homework?: string | null;
+          documents?: Json;
+          links?: Json;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
