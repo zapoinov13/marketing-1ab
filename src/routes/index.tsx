@@ -90,8 +90,9 @@ function Dashboard() {
     ? Math.min(stagesDone, achievements.length)
     : achievements.filter((a) => a.unlocked).length;
 
-  const hour = new Date().getHours();
-  const greeting = greetingForHour(hour);
+  const [hour, setHour] = useState<number | null>(null);
+  useEffect(() => setHour(new Date().getHours()), []);
+  const greeting = hour === null ? "Привет" : greetingForHour(hour);
   const initial = name.trim().charAt(0).toUpperCase() || "У";
 
   const focusHint = live.loggedIn
