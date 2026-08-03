@@ -175,7 +175,7 @@ function MissionControl() {
             Карта AI-компании
           </h1>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            Выбери этап слева — справа откроются задачи, чеклист и материалы.
+            Выбери этап слева - справа откроются задачи, чеклист и материалы.
             {user ? (
               <span className="ml-2 text-emerald-400">
                 · сохраняется{loadingDb ? "…" : ""}
@@ -199,7 +199,7 @@ function MissionControl() {
         <Stat label="Пройдено этапов" value={`${stagesDone}/8`} />
         <Stat
           label="Сейчас"
-          value={stages.find((s) => s.status === "active")?.title ?? "—"}
+          value={stages.find((s) => s.status === "active")?.title ?? " - "}
         />
         <Stat
           label="Чеклист этапа"
@@ -443,7 +443,7 @@ function MissionControl() {
                         onClick={() => void setStageStatus(selected.id, "done")}
                         className="mt-2 w-full rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2.5 text-sm text-emerald-400"
                       >
-                        Чеклист заполнен — отметить этап готовым
+                        Чеклист заполнен - отметить этап готовым
                       </button>
                     )}
                 </div>

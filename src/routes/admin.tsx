@@ -248,7 +248,7 @@ where id = (
                   Сейчас это демо-пример
                 </div>
                 <p className="mt-1 text-sm leading-relaxed text-yellow-50/80">
-                  Список ниже — не настоящие ученики. Чтобы увидеть реальных людей
+                  Список ниже - не настоящие ученики. Чтобы увидеть реальных людей
                   из базы, один раз открой доступ админа для своего аккаунта.
                 </p>
               </div>
@@ -304,11 +304,11 @@ where id = (
               <Link to="/login" className="underline hover:text-white">
                 войди в аккаунт
               </Link>{" "}
-              — подставим твой email автоматически.
+ - подставим твой email автоматически.
             </div>
           ) : (
             <div className="border-t border-yellow-500/20 px-5 py-3 text-xs text-yellow-50/70 sm:px-6">
-              После Run обнови страницу — жёлтый блок исчезнет, появятся живые ученики.
+              После Run обнови страницу - жёлтый блок исчезнет, появятся живые ученики.
             </div>
           )}
         </motion.div>
@@ -375,7 +375,7 @@ where id = (
               <UserPlus className="h-4 w-4 text-primary" /> Добавить ученика
             </div>
             <p className="mt-1 text-xs text-muted-foreground">
-              Отправь ссылку на регистрацию. После входа ученик появится в списке —
+              Отправь ссылку на регистрацию. После входа ученик появится в списке - 
               его можно заблокировать или удалить.
             </p>
           </div>
@@ -553,7 +553,7 @@ where id = (
                 </span>
               </div>
               <div className="hidden text-[11px] uppercase tracking-wide text-muted-foreground lg:block">
-                клик — детали и этапы
+                клик - детали и этапы
               </div>
             </div>
 
@@ -905,18 +905,18 @@ function StudentRow({
           >
             <div className="border-t border-border bg-background/35 px-5 py-5">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                <Info label="Email" value={student.email || "—"} />
+                <Info label="Email" value={student.email || " - "} />
                 <Info
                   label="Telegram"
-                  value={student.telegram || "—"}
+                  value={student.telegram || " - "}
                   icon={<Users className="h-3.5 w-3.5" />}
                 />
                 <Info
                   label="Телефон"
-                  value={student.phone || "—"}
+                  value={student.phone || " - "}
                   icon={<Phone className="h-3.5 w-3.5" />}
                 />
-                <Info label="Компания" value={student.company || "—"} />
+                <Info label="Компания" value={student.company || " - "} />
               </div>
 
               {!isSelf && (
@@ -968,7 +968,7 @@ function StudentRow({
 
               {isSelf && (
                 <p className="mt-4 text-xs text-muted-foreground">
-                  Это твой аккаунт — действия доступа недоступны.
+                  Это твой аккаунт - действия доступа недоступны.
                 </p>
               )}
 

@@ -51,7 +51,7 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-/* Dark-only product surface — Linear/Vercel-grade minimalism */
+/* Dark-only product surface - Linear/Vercel-grade minimalism */
 :root {
   --radius: 0.875rem;
 

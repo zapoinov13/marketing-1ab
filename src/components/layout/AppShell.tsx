@@ -1,14 +1,29 @@
 import { useState, type ReactNode } from "react";
+import { useRouterState } from "@tanstack/react-router";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
 import { Menu, X } from "lucide-react";
 
+const AUTH_ROUTES = ["/login", "/signup", "/reset-password"];
+
 export function AppShell({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAuthRoute = AUTH_ROUTES.some(
+    (r) => pathname === r || pathname.startsWith(`${r}/`),
+  );
+
+  if (isAuthRoute) {
+    return (
+      <div className="min-h-screen w-full bg-background text-foreground">
+        <main className="min-h-screen">{children}</main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen w-full bg-background text-foreground">
-      {/* Sidebar — desktop */}
+      {/* Sidebar - desktop */}
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 border-r border-border bg-sidebar lg:block">
         <Sidebar onNavigate={() => setMobileOpen(false)} />
       </aside>

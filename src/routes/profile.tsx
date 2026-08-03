@@ -443,7 +443,7 @@ function Profile() {
             <div className="rounded-3xl border border-border bg-card p-5">
               <div className="text-sm font-semibold">Сохрани прогресс</div>
               <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                Войди в аккаунт — профиль, этапы и фото будут в облаке.
+                Войди в аккаунт - профиль, этапы и фото будут в облаке.
               </p>
               <Link
                 to="/signup"

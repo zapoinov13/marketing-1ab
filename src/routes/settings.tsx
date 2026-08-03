@@ -135,7 +135,7 @@ function Settings() {
         msg.toLowerCase().includes("does not exist")
       ) {
         setDbStatus("no-schema");
-        setDbDetail("Ключ ок, но схема ещё не применена — запусти SQL миграцию");
+        setDbDetail("Ключ ок, но схема ещё не применена - запусти SQL миграцию");
         return;
       }
       setDbStatus("error");

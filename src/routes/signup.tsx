@@ -6,13 +6,13 @@ import { AuthLayout } from "@/components/auth/AuthLayout";
 export const Route = createFileRoute("/signup")({
   head: () => ({
     meta: [
-      { title: "Регистрация — AI Marketing Lab by MarkVision" },
+      { title: "Регистрация - AI Marketing Lab by MarkVision" },
       {
         name: "description",
         content:
           "Создайте аккаунт AI Marketing Lab: уроки, AI-сотрудники, практика и прогресс вашей AI-компании.",
       },
-      { property: "og:title", content: "Регистрация — AI Marketing Lab" },
+      { property: "og:title", content: "Регистрация - AI Marketing Lab" },
       {
         property: "og:description",
         content:
@@ -57,7 +57,7 @@ function SignupPage() {
       return;
     }
     if (res.needsConfirm) {
-      setInfo("Проверь почту и подтверди email — потом войди.");
+      setInfo("Проверь почту и подтверди email - потом войди.");
       return;
     }
     void navigate({ to: "/" });
@@ -67,7 +67,7 @@ function SignupPage() {
     <AuthLayout
       eyebrow="Новый аккаунт"
       title="Регистрация"
-      description="Заполните форму — и платформа начнёт вести ваш прогресс: этапы, XP, домашние задания и AI-сотрудников вашей компании."
+      description="Заполните форму - и платформа начнёт вести ваш прогресс: этапы, XP, домашние задания и AI-сотрудников вашей компании."
       footer={
         <>
           Уже есть аккаунт?{" "}
@@ -79,7 +79,7 @@ function SignupPage() {
     >
       {!configured && (
         <div className="mt-4 rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-3 py-2 text-xs text-yellow-200">
-          Ключи бэкенда не загружены — регистрация временно недоступна.
+          Ключи бэкенда не загружены - регистрация временно недоступна.
         </div>
       )}
 

@@ -81,22 +81,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "AI Marketing Lab — MarkVision AI" },
+      { title: "AI Marketing Lab - MarkVision AI" },
       {
         name: "description",
         content:
-          "AI Marketing Lab by MarkVision — операционная система для построения собственной AI-команды. Уроки, AI-ассистент, комьюнити.",
+          "AI Marketing Lab by MarkVision - операционная система для построения собственной AI-команды. Уроки, AI-ассистент, комьюнити.",
       },
       { name: "author", content: "MarkVision AI" },
-      { property: "og:title", content: "AI Marketing Lab — MarkVision AI" },
+      { property: "og:title", content: "AI Marketing Lab - MarkVision AI" },
       {
         property: "og:description",
-        content: "AI Marketing Lab by MarkVision — операционная система для построения собственной AI-команды. Уроки, AI-ассистент, комьюнити.",
+        content: "AI Marketing Lab by MarkVision - операционная система для построения собственной AI-команды. Уроки, AI-ассистент, комьюнити.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "AI Marketing Lab — MarkVision AI" },
-      { name: "twitter:description", content: "AI Marketing Lab by MarkVision — операционная система для построения собственной AI-команды. Уроки, AI-ассистент, комьюнити." },
+      { name: "twitter:title", content: "AI Marketing Lab - MarkVision AI" },
+      { name: "twitter:description", content: "AI Marketing Lab by MarkVision - операционная система для построения собственной AI-команды. Уроки, AI-ассистент, комьюнити." },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/KwyujX8PvBRkTPCKNDrYkG6yb7W2/social-images/social-1784201745663-ChatGPT_Image_20_янв._2026_г.,_23_43_55.webp" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/KwyujX8PvBRkTPCKNDrYkG6yb7W2/social-images/social-1784201745663-ChatGPT_Image_20_янв._2026_г.,_23_43_55.webp" },
     ],

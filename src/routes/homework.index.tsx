@@ -287,7 +287,7 @@ function Homework() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
-                placeholder="Описание — что нужно сделать"
+                placeholder="Описание - что нужно сделать"
                 className="w-full resize-none rounded-xl border border-border bg-background/50 px-4 py-3 text-sm outline-none focus:border-primary/50"
               />
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">

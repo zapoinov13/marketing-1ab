@@ -6,13 +6,13 @@ import { AuthLayout } from "@/components/auth/AuthLayout";
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
-      { title: "Вход — AI Marketing Lab by MarkVision" },
+      { title: "Вход - AI Marketing Lab by MarkVision" },
       {
         name: "description",
         content:
           "Войдите в AI Marketing Lab, чтобы продолжить обучение, сохранять прогресс, XP и домашние задания.",
       },
-      { property: "og:title", content: "Вход — AI Marketing Lab" },
+      { property: "og:title", content: "Вход - AI Marketing Lab" },
       {
         property: "og:description",
         content:
@@ -66,7 +66,7 @@ function LoginPage() {
     >
       {!configured && (
         <div className="mt-4 rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-3 py-2 text-xs text-yellow-200">
-          Ключи бэкенда не загружены — вход временно недоступен.
+          Ключи бэкенда не загружены - вход временно недоступен.
         </div>
       )}
 
@@ -110,7 +110,7 @@ function LoginPage() {
           {loading ? "Вхожу…" : "Войти"}
         </button>
         <p className="text-center text-xs text-muted-foreground">
-          Забыли пароль? Напишите куратору — доступ восстановим.
+          Забыли пароль? Напишите куратору - доступ восстановим.
         </p>
       </form>
     </AuthLayout>
