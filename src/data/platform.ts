@@ -82,7 +82,7 @@ export const missionStages: MissionStage[] = [
     subtitle: "Claude Code как мозг компании",
     status: "locked",
     progress: 0,
-    description: "Подключаем AI Brain — Claude Code, правила, навыки и систему памяти.",
+    description: "Подключаем AI Brain - Claude Code, правила, навыки и систему памяти.",
     whatToDo: [
       "Установить Claude Code",
       "Настроить CLAUDE.md и skills",
@@ -290,7 +290,7 @@ export type LessonCard = {
   description: string;
   about: string[];
   status: StageStatus;
-  /** YouTube / Vimeo / Loom embed URL — пока пусто, вставим позже */
+  /** YouTube / Vimeo / Loom embed URL - пока пусто, вставим позже */
   videoEmbedUrl?: string;
   documents: LessonDoc[];
   links: { title: string; href: string }[];
@@ -327,7 +327,7 @@ export const lessons: LessonCard[] = [
     description: "Установка, skills, правила проекта и первый агентский сценарий.",
     about: [
       "Установка Claude Code и вход в проект.",
-      "CLAUDE.md — правила и контекст бизнеса.",
+      "CLAUDE.md - правила и контекст бизнеса.",
       "Первый skill под повторяющуюся задачу.",
     ],
     status: "locked",
@@ -492,7 +492,7 @@ export const docArticles: DocArticle[] = [
       "Зайди в Meta Business Suite и создай Business Manager, если его ещё нет.",
       "Добавь рекламный кабинет и страницу компании.",
       "Создай System User и сгенерируй токен с правами ads_management.",
-      "Сохрани токен в безопасном месте — позже подключим его к автоматизациям.",
+      "Сохрани токен в безопасном месте - позже подключим его к автоматизациям.",
     ],
   },
   {
@@ -602,7 +602,7 @@ export const docArticles: DocArticle[] = [
     body: [
       "Зайди в platform.openai.com → API keys.",
       "Создай ключ и сразу сохрани его.",
-      "Не коммить ключ в Git — только env / secrets.",
+      "Не коммить ключ в Git - только env / secrets.",
     ],
   },
 ];

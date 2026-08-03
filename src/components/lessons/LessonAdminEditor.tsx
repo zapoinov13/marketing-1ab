@@ -184,7 +184,7 @@ export function LessonAdminEditor({
         />
       </Field>
 
-      <Field label="О чём урок (каждая строка — пункт)" className="mt-4">
+      <Field label="О чём урок (каждая строка - пункт)" className="mt-4">
         <textarea
           value={aboutText}
           onChange={(e) => setAboutText(e.target.value)}

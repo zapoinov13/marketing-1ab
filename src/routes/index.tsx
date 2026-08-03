@@ -98,7 +98,7 @@ function Dashboard() {
 
   const focusHint = live.loggedIn
     ? stagesDone === 0 && activeStage?.progress === 0
-      ? "Стартуй с первого урока — так начнётся твоя AI-компания."
+      ? "Стартуй с первого урока - так начнётся твоя AI-компания."
       : `Сейчас в работе: этап ${activeStage.id}. ${activeStage.title}.`
     : "Демо-режим. Войди, чтобы прогресс сохранялся.";
 

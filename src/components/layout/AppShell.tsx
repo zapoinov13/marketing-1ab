@@ -23,7 +23,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen w-full bg-background text-foreground">
-      {/* Sidebar — desktop */}
+      {/* Sidebar - desktop */}
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 border-r border-border bg-sidebar lg:block">
         <Sidebar onNavigate={() => setMobileOpen(false)} />
       </aside>

@@ -186,7 +186,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return { error: "Выбери файл изображения" };
       }
       if (file.size > 8 * 1024 * 1024) {
-        return { error: "Фото больше 8 МБ — сожми или выбери другое" };
+        return { error: "Фото больше 8 МБ - сожми или выбери другое" };
       }
 
       let blob: Blob;

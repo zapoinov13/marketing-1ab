@@ -214,7 +214,7 @@ function Assistant() {
                   }
                 }}
                 rows={1}
-                placeholder="Спроси по курсу… Enter — отправить"
+                placeholder="Спроси по курсу… Enter - отправить"
                 className="max-h-32 min-h-12 flex-1 resize-none rounded-2xl border border-border bg-background/50 px-4 py-3 text-sm outline-none focus:border-primary/50"
               />
               <button
@@ -290,13 +290,13 @@ function Assistant() {
 function demoReply(question: string) {
   const q = question.toLowerCase();
   if (q.includes("meta")) {
-    return "Чтобы подключить Meta:\n1) Business Manager\n2) Рекламный кабинет\n3) System User + токен\n\nПодробности — в Документации → Meta.";
+    return "Чтобы подключить Meta:\n1) Business Manager\n2) Рекламный кабинет\n3) System User + токен\n\nПодробности - в Документации → Meta.";
   }
   if (q.includes("n8n")) {
     return "Частые ошибки n8n:\n• неверный webhook URL\n• истёкший credential\n• кривой JSON в Code node\n\nПроверь credentials и последний execution.";
   }
   if (q.includes("сайт")) {
-    return "Пришли ссылку на сайт — в полной версии проверю оффер, CTA и скорость.\nПока открой урок «Первый сайт» и чеклист деплоя.";
+    return "Пришли ссылку на сайт - в полной версии проверю оффер, CTA и скорость.\nПока открой урок «Первый сайт» и чеклист деплоя.";
   }
   if (q.includes("оффер")) {
     return "Черновик оффера:\n«За 7 дней соберём AI-команду, которая ведёт рекламу, контент и отчёты без найма отдела.»\n\nНужна версия под твою нишу?";
